@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="?attr/colorSurface"
+    android:padding="@dimen/margin_normal">
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/user_photo"
+        android:layout_width="@dimen/user_photo_normal"
+        android:layout_height="@dimen/user_photo_normal"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/user_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
+        android:textStyle="bold"
+        android:layout_marginStart="@dimen/margin_small"
+        app:layout_constraintStart_toEndOf="@id/user_photo"
+        app:layout_constraintTop_toTopOf="@id/user_photo" />
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/text_answer"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/margin_xsmall"
+        android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@id/user_name"
+        app:layout_constraintTop_toBottomOf="@id/user_name" />
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/photo_answer"
+        android:layout_width="@dimen/thumbnail_size"
+        android:layout_height="@dimen/thumbnail_size"
+        android:layout_marginTop="@dimen/margin_xsmall"
+        android:scaleType="centerCrop"
+        app:layout_constraintStart_toStartOf="@id/text_answer"
+        app:layout_constraintTop_toBottomOf="@id/text_answer" />
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/elapsed_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="@style/TextAppearance.MaterialComponents.Body2"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

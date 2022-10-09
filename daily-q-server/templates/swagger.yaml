@@ -1,0 +1,591 @@
+openapi: 3.0.0
+info:
+  title: Daily Q API
+  description: Daily Q API 테스트 도구
+  version: 0.1.1
+tags:
+  - name: Version 1
+  - name: Version 2
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTY1NDE3OTM1NCwianRpIjoiMWM0NmNkYTctM2RiOC00NzI1LThjMjctNWU3ZGFjMmE5OTI1IiwibmJmIjoxNjU0MTc5MzU0LCJ0eXBlIjoiYWNjZXNzIiwic3ViIjoidmluY2VudCIsImV4cCI6MjUxODE3OTM1NH0.8476vch4q9uXhPUtIHQXHpHm7BttBiXvU2E1Dsin3fw
+paths:
+  /v1/hello-world:
+    get:
+      summary: Hello, world!
+      responses:
+        200:
+          description: 성공
+          content:
+            text/plain:
+              schema:
+                type: string
+              example: Hello, world!
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  date:
+                    type: string
+                    format: date-time
+              example: { "message": "Hello, world!", "date": "2022-06-02T12:44:58Z" }
+      tags:
+        - Version 1
+  /v1/questions/{qid}:
+    parameters:
+      - name: qid
+        in: path
+        required: true
+        schema:
+          type: string
+    get:
+      summary: 질문 가져오기
+      responses:
+        200:
+          description: 성공
+          content:
+            application/json:
+              example: { "id": "2022-01-01", "text": "산타를 몇살까지 믿었나요?", "answer_count": 0, "updated_at": "2022-04-18T18:51:32Z", "created_at": "2022-04-18T18:51:32Z" }
+        404:
+          description: 질문을 찾을 수 없음
+          content:
+            application/json:
+              example: { "message": "Question not found" }
+      tags:
+        - Version 1
+  /v1/questions/{qid}/answers:
+    parameters:
+      - name: qid
+        in: path
+        required: true
+        schema:
+          type: string
+    post:
+      summary: 답 쓰기
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                text:
+                  type: string
+                photo:
+                  type: string
+                  format: url
+      responses:
+        201:
+          description: 성공
+          content:
+            application/json:
+              example: { "qid": "2022-04-18", "uid": "anonymous", "text": "5살에 진실을 알았습니다.", "updated_at": "2022-06-02T13:10:26Z", "created_at": "2022-06-02T13:10:26Z" }
+        404:
+          description: 질문을 찾을 수 없음
+          content:
+            application/json:
+              example: { "message": "Question not found" }
+        409:
+          description: 이미 답이 있음
+          content:
+            application/json:
+              example: { "message": "Already answered" }
+      tags:
+        - Version 1
+  /v1/questions/{qid}/answers/{uid}:
+    parameters:
+      - name: qid
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: uid
+        in: path
+        required: true
+        description: v1은 anonymous만 사용
+        schema:
+          type: string
+          default: anonymous
+    get:
+      summary: 답 가져오기
+      responses:
+        200:
+          description: 성공
+          content:
+            application/json:
+              example: { "qid": "2022-04-18", "uid": "anonymous", "text": "5살에 진실을 알았습니다.", "updated_at": "2022-06-02T13:10:26Z", "created_at": "2022-06-02T13:10:26Z" }
+        404:
+          description: 답을 찾을 수 없음
+          content:
+            application/json:
+              example: { "message": "Answer not found" }
+      tags:
+        - Version 1
+    put:
+      summary: 답 수정하기
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                text:
+                  type: string
+                photo:
+                  type: string
+                  format: url
+      responses:
+        200:
+          description: 성공
+          content:
+            application/json:
+              example: { "qid": "2022-04-18", "uid": "anonymous", "text": "산타크로스는 진짜입니다.", "updated_at": "2022-06-02T13:52:04Z", "created_at": "2022-06-02T13:10:26Z" }
+        403:
+          description: 권한 없음
+          content:
+            application/json:
+              example: { "message": "Permission denied" }
+        404:
+          description: 질문을 찾을 수 없음 / 답을 찾을 수 없음
+          content:
+            application/json:
+              examples:
+                question:
+                  value: { "message": "Question not found" }
+                answer:
+                  value: { "message": "Answer not found" }
+      tags:
+        - Version 1
+    delete:
+      summary: 답 삭제하기
+      responses:
+        204:
+          description: 성공
+        403:
+          description: 권한 없음
+          content:
+            application/json:
+              example: { "message": "Permission denied" }
+        404:
+          description: 답을 찾을 수 없음
+          content:
+            application/json:
+              example: { "message": "Answer not found" }
+      tags:
+        - Version 1
+  /v2/token:
+    post:
+      summary: 토큰 발급/갱신
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              required:
+                - grant_type
+              properties:
+                grant_type:
+                  enum:
+                    - password
+                    - refresh_token
+                username:
+                  type: string
+                password:
+                  type: string
+                  format: password
+                refresh_token:
+                  type: string
+      responses:
+        200:
+          description: 성공
+          content:
+            application/json:
+              example: { "token_type": "Bearer", "access_token": "eyJ0eXAiOiJK...99sPTAtFC1YFQ", "refresh_token": "eyJ0eXAiOiJK...g6TQ14ricfH0ws" }
+
+        400:
+          description: "- 유효하지 않은 토큰\n - 지원하지 않는 grant type"
+          content:
+            application/json:
+              examples:
+                refresh_token:
+                  value: { "message": "Invalid refresh token" }
+                grant_type:
+                  value: { "message": "Unsupported grant type" }
+        401:
+          description: 사용자 이름 또는 비밀번호가 정확하지 않음
+          content:
+            application/json:
+              example: { "message": "The username or password was not correct" }
+
+      tags:
+        - Version 2
+  /v2/user/push-tokens:
+    post:
+      summary: 푸시 토큰 등록
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              required:
+                - token
+              properties:
+                token:
+                  type: string
+      responses:
+        204:
+          description: 성공
+      security:
+        - bearerAuth: [ ]
+      tags:
+        - Version 2
+  /v2/users/{uid}:
+    parameters:
+      - name: uid
+        in: path
+        required: true
+        schema:
+          type: string
+    get:
+      summary: 사용자 정보 가져오기
+      responses:
+        200:
+          description: 성공
+          content:
+            application/json:
+              example: { "id": "vincent", "name": "빈센트", "description": "나는 그림을 그리기 위해서 살아있다", "photo": "http://127.0.0.1:5000/v2/images/vincent.jpg", "answer_count": 604, "follower_count": 3, "following_count": 3, "is_following": false, "updated_at": "2022-06-02T08:38:00Z", "created_at": "2022-04-18T18:51:11Z" }
+        404:
+          description: 사용자 정보를 찾을 수 없음
+          content:
+            application/json:
+              example: { "message": "User not found" }
+      security:
+        - bearerAuth: [ ]
+      tags:
+        - Version 2
+  /v2/questions/{qid}:
+    parameters:
+      - name: qid
+        in: path
+        required: true
+        schema:
+          type: string
+    get:
+      parameters:
+        - name: If-None-Match
+          in: header
+          allowEmptyValue: false
+          required: false
+          schema:
+            type: string
+      summary: 질문 가져오기
+      responses:
+        200:
+          description: 성공
+          content:
+            application/json:
+              example: { "id": "2022-04-18", "text": "주변의 녹색을 찾아보아요", "answer_count": 0, "updated_at": "2022-04-18T18:51:33Z", "created_at": "2022-04-18T18:51:33Z"}
+        304:
+          description: 변경 없음
+        404:
+          description: 질문을 찾을 수 없음
+          content:
+            application/json:
+              example: { "message": "Question not found" }
+      security:
+        - bearerAuth: [ ]
+      tags:
+        - Version 2
+  /v2/questions:
+    get:
+      summary: 질문 목록 가져오기
+      parameters:
+        - name: from_date
+          in: query
+          required: true
+          schema:
+            type: string
+        - name: page_size
+          in: query
+          required: false
+          schema:
+            type: integer
+            default: 5
+      responses:
+        200:
+          description: 성공
+          content:
+            application/json:
+              example: [ { "id": "2022-04-18", "text": "주변의 녹색을 찾아보아요", "answer_count": 0, "updated_at": "2022-04-18T18:51:33Z", "created_at": "2022-04-18T18:51:33Z" }, /* ... */, { "id": "2022-04-14", "text": "내 묘비명은 무엇이 될까요?", "answer_count": 0, "updated_at": "2022-04-18T18:51:33Z", "created_at": "2022-04-18T18:51:33Z" } ]
+        400:
+          description: from_date가 미래일 수 없음
+          content:
+            application/json:
+              example: { "message": "from_date is invalid" }
+      security:
+        - bearerAuth: [ ]
+      tags:
+        - Version 2
+  /v2/users/{uid}/answers:
+    parameters:
+      - name: uid
+        in: path
+        required: true
+        schema:
+          type: string
+    get:
+      summary: 사용자의 답 목록 가져오기
+      parameters:
+        - name: from_date
+          in: query
+          required: true
+          schema:
+            type: string
+        - name: page_size
+          in: query
+          required: false
+          schema:
+            type: integer
+            default: 3
+      responses:
+        200:
+          description: 성공
+          content:
+            application/json:
+              example: [ { "question": { "id": "2022-04-08", "text": "램프의 지니가 한 가지 소원을 들어준다면?", "answer_count": 2, "updated_at": "2022-04-18T18:51:33Z", "created_at": "2022-04-18T18:51:33Z" }, "answer": { "qid": "2022-04-08", "uid": "vincent", "text": "가족과의 관계를 회복하고 싶어요", "updated_at": "2022-04-18T18:51:33Z", "created_at": "2022-04-18T18:51:33Z" } }, /* ... */, { "question": { "id": "2022-04-05", "created_at": "2022-04-18T18:51:33Z", "updated_at": "2022-04-18T18:51:33Z", "text": "혼자 시간을 보낼 때 주로 무엇을 하나요?", "answer_count": 2 }, "answer": { "created_at": "2022-04-18T18:51:33Z", "qid": "2022-04-05", "updated_at": "2022-04-18T18:51:33Z", "text": "그림을 그립니다. 항상 똑같죠.", "uid": "vincent" } } ]
+      security:
+        - bearerAuth: [ ]
+      tags:
+        - Version 2
+  /v2/questions/{qid}/answers:
+    parameters:
+      - name: qid
+        in: path
+        required: true
+        schema:
+          type: string
+    get:
+      summary: 답 목록 가져오기
+      parameters:
+        - name: If-None-Match
+          in: header
+          required: false
+          allowEmptyValue: false
+          schema:
+            type: string
+      responses:
+        200:
+          description: 성공
+          content:
+            application/json:
+              example: [ { "qid": "2022-04-08", "uid": "vincent", "text": "가족과의 관계를 회복하고 싶어요", "answerer": { "id": "vincent", "name": "빈센트", "photo": "http://127.0.0.1:5000/v2/images/vincent.jpg", "description": "나는 그림을 그리기 위해서 살아있다", "answer_count": 604, "follower_count": 3, "following_count": 3, "updated_at": "2022-06-02T08:38:00Z", "created_at": "2022-04-18T18:51:11Z" }, "updated_at": "2022-04-18T18:51:33Z", "created_at": "2022-04-18T18:51:33Z" }, { "qid": "2022-04-08", "uid": "zuave", "text": "이번주 로또 당첨 번호를 알려줘", "answerer": { "id": "zuave", "name": "주아브 병사", "photo": "http://127.0.0.1:5000/v2/images/zuave.jpg", "description": "NO WAR", "answer_count": 400, "follower_count": 3, "following_count": 0, "updated_at": "2022-04-18T18:51:56Z", "created_at": "2022-04-18T18:51:11Z" }, "updated_at": "2022-04-18T18:51:33Z", "created_at": "2022-04-18T18:51:33Z" } ]
+        304:
+          description: 변경 없음
+      security:
+        - bearerAuth: [ ]
+      tags:
+        - Version 2
+    post:
+      summary: 답 쓰기
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                text:
+                  type: string
+                photo:
+                  type: string
+                  format: url
+      responses:
+        200:
+          description: 성공
+          content:
+            application/json:
+              example: { "qid": "2021-04-01", "uid": "vincent", "text": "배가 고픕니다.", "updated_at": "2022-06-02T16:16:02Z", "created_at": "2022-06-02T16:16:02Z" }
+        404:
+          description: 질문을 찾을 수 없음
+          content:
+            application/json:
+              example: { "message": "Question not found" }
+        409:
+          description: 이미 답이 있음
+          content:
+            application/json:
+              example: { "message": "Already answered" }
+      security:
+        - bearerAuth: [ ]
+      tags:
+        - Version 2
+  /v2/questions/{qid}/answers/{uid}:
+    parameters:
+      - name: qid
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: uid
+        in: path
+        required: true
+        schema:
+          type: string
+    get:
+      summary: 답 가져오기
+      responses:
+        200:
+          description: 성공
+          content:
+            application/json:
+              example: { "qid": "2022-04-08", "uid": "vincent", "text": "가족과의 관계를 회복하고 싶어요", "answerer": { "id": "vincent", "name": "빈센트", "photo": "http://127.0.0.1:5000/v2/images/vincent.jpg", "description": "나는 그림을 그리기 위해서 살아있다", "answer_count": 604, "follower_count": 3, "following_count": 3, "updated_at": "2022-06-02T08:38:00Z", "created_at": "2022-04-18T18:51:11Z" }, "updated_at": "2022-04-18T18:51:33Z", "created_at": "2022-04-18T18:51:33Z" }
+        403:
+          description: 권한 없음
+          content:
+            application/json:
+              example: { "message": "Permission denied" }
+        404:
+          description: 질문을 찾을 수 없음 / 답을 찾을 수 없음
+          content:
+            application/json:
+              examples:
+                question:
+                  value: { "message": "Question not found" }
+                answer:
+                  value: { "message": "Answer not found" }
+      security:
+        - bearerAuth: [ ]
+      tags:
+        - Version 2
+    put:
+      summary: 답 수정하기
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                text:
+                  type: string
+                photo:
+                  type: string
+                  format: url
+      responses:
+        200:
+          description: 성공
+          content:
+            application/json:
+              example: { "qid": "2022-04-08", "uid": "vincent", "text": "가족과의 관계를 회복하고 싶어요.", "updated_at": "2022-06-02T16:27:40Z", "created_at": "2022-04-18T18:51:33Z" }
+        403:
+          description: 권한 없음
+          content:
+            application/json:
+              example: { "message": "Permission denied" }
+        404:
+          description: 질문을 찾을 수 없음 / 답을 찾을 수 없음
+          content:
+            application/json:
+              examples:
+                question:
+                  value: { "message": "Question not found" }
+                answer:
+                  value: { "message": "Answer not found" }
+      security:
+        - bearerAuth: [ ]
+      tags:
+        - Version 2
+    delete:
+      summary: 답 삭제하기
+      responses:
+        204:
+          description: 성공
+        403:
+          description: 권한 없음
+          content:
+            application/json:
+              example: { "message": "Permission denied" }
+        404:
+          description: 답을 찾을 수 없음
+          content:
+            application/json:
+              example: { "message": "Answer not found" }
+      security:
+        - bearerAuth: [ ]
+      tags:
+        - Version 2
+  /v2/images:
+    post:
+      summary: 이미지 업로드
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                image:
+                  type: string
+                  format: binary
+      responses:
+        201:
+          description: 성공
+          content:
+            application/json:
+              example: { "url": "http://127.0.0.1:5000/v2/images/91c62eed7c3d4e7b9a82783589857ec8" }
+      security:
+        - bearerAuth: [ ]
+      tags:
+        - Version 2
+  /v2/user/following/{followee_uid}:
+    parameters:
+      - name: followee_uid
+        in: path
+        required: true
+        schema:
+          type: string
+    post:
+      summary: 팔로우
+      responses:
+        204:
+          description: 성공
+        400:
+          description: 자기를 팔로우 할 수 없음
+          content:
+            application/json:
+              example: { "message": "Can't follow yourself" }
+        404:
+          description: 사용자를 찾을 수 없음
+          content:
+            application/json:
+              example: { "message": "User not found" }
+        409:
+          description: 이미 팔로우 하고 있음
+          content:
+            application/json:
+              example: { "message": "Following already" }
+      security:
+        - bearerAuth: [ ]
+      tags:
+        - Version 2
+    delete:
+      summary: 팔로우 취소
+      responses:
+        204:
+          description: 성공
+        400:
+          description: 자기를 팔로우 할 수 없음
+          content:
+            application/json:
+              example: { "message": "Can't follow yourself" }
+        404:
+          description: 팔로우 하고 있지 않음
+          content:
+            application/json:
+              example: { "message": "Not following" }
+      security:
+        - bearerAuth: [ ]
+      tags:
+        - Version 2

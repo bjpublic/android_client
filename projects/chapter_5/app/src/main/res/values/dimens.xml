@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="margin_xxlarge">48dp</dimen>
+    <dimen name="margin_xlarge">32dp</dimen>
+    <dimen name="margin_large">24dp</dimen>
+    <dimen name="margin_normal">16dp</dimen>
+    <dimen name="margin_small">8dp</dimen>
+    <dimen name="margin_xsmall">4dp</dimen>
+
+    <dimen name="qa_height">160dp</dimen>
+    <dimen name="thumbnail_size">56dp</dimen>
+    <dimen name="divider">1dp</dimen>
+</resources>

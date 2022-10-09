@@ -1,0 +1,55 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- Base application theme. -->
+    <style name="Theme.DailyQ" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
+        <!-- Primary brand color. -->
+        <item name="colorPrimary">@color/blue_a700</item>
+        <item name="colorPrimaryVariant">@color/blue_a400_dark</item>
+        <item name="colorOnPrimary">@color/white</item>
+        <!-- Secondary brand color. -->
+        <item name="colorSecondary">@color/blue_a700</item>
+        <item name="colorSecondaryVariant">@color/blue_a400_dark</item>
+        <item name="colorOnSecondary">@color/black</item>
+        <!-- Status bar color. -->
+        <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
+        <!-- Customize your theme here. -->
+        <item name="colorUnderCard">@color/light_gray</item>
+        <item name="colorFollowButton">@color/blue_a700</item>
+        <item name="colorUnfollowButton">@color/red_500</item>
+    </style>
+
+    <style name="Theme.DailyQ.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
+    <style name="Theme.DailyQ.ImageViewer">
+        <item name="android:windowFullscreen">true</item>
+        <item name="actionBarStyle">@style/Theme.DailyQ.Dark.ActionBar</item>
+        <item name="windowActionBarOverlay">true</item>
+    </style>
+
+    <style name="Theme.DailyQ.Dark.ActionBar" parent="Widget.MaterialComponents.ActionBar.Solid">
+        <item name="background">@color/black_50p</item>
+    </style>
+
+    <style name="Theme.DailyQ.Dark" parent="Theme.MaterialComponents">
+        <item name="colorPrimary">@color/apache</item>
+        <item name="colorPrimaryVariant">@color/golden_grass</item>
+        <item name="colorSecondary">@color/apache</item>
+        <item name="colorSecondaryVariant">@color/golden_grass</item>
+        <item name="colorSurface">@color/mine_shaft</item>
+
+        <item name="android:statusBarColor" tools:targetApi="l">@color/cod_gray</item>
+        <item name="actionBarStyle">@style/Theme.DailyQ.Dark.ActionBar</item>
+        <item name="bottomNavigationStyle">@style/Theme.DailyQ.Dark.BottomNavigationStyle</item>
+
+        <item name="colorUnderCard">@color/woodsmoke</item>
+        <item name="colorFollowButton">@color/malibu</item>
+        <item name="colorUnfollowButton">@color/bittersweet</item>
+    </style>
+
+    <style name="Theme.DailyQ.Dark.BottomNavigationStyle" parent="Widget.MaterialComponents.BottomNavigationView">
+        <item name="android:background">@color/cod_gray</item>
+    </style>
+
+</resources>

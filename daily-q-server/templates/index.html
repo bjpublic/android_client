@@ -1,0 +1,21 @@
+<html>
+    <head>
+        <title>Daily Q API Server</title>
+        <style>
+        .circle {
+          width: 10px;
+          height: 10px;
+          background-color: green;
+          border-radius: 50%;
+          display: inline-block;
+        }
+        </style>
+    </head>
+    <body>
+        <h1>Daily Q API Server</h1>
+        {% if firebase %}
+        <span class="circle"></span>
+        <span>Firebase initialized</span>
+        {% endif %}
+    </body>
+</html>

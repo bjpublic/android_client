@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <attr name="colorUnderCard" format="reference|color" />
+    <attr name="colorFollowButton" format="reference|color" />
+    <attr name="colorUnfollowButton" format="reference|color" />
+</resources>

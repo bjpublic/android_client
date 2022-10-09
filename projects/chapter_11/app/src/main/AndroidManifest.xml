@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="online.dailyq">
+
+    <uses-permission android:name="android.permission.INTERNET" />
+
+    <application
+        android:name=".App"
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:usesCleartextTraffic="true"
+        android:theme="@style/Theme.DailyQ">
+
+        <activity
+            android:name=".ui.splash.SplashActivity"
+            android:theme="@style/Theme.DailyQ.NoActionBar"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <activity
+            android:name=".ui.login.LoginActivity" >
+        </activity>
+
+        <activity
+            android:name=".ui.main.MainActivity">
+        </activity>
+
+        <activity
+            android:name=".ui.write.WriteActivity"
+            android:windowSoftInputMode="adjustResize">
+
+        </activity>
+
+        <activity
+            android:name=".ui.details.DetailsActivity" >
+
+        </activity>
+
+        <activity
+            android:theme="@style/Theme.DailyQ.ImageViewer"
+            android:label=""
+            android:name=".ui.image.ImageViewerActivity" >
+
+        </activity>
+
+        <activity
+            android:name=".ui.profile.ProfileActivity" >
+
+        </activity>
+
+        <service
+            android:name=".messaging.MessagingService"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
+
+    </application>
+
+</manifest>
