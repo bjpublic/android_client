@@ -4,14 +4,14 @@ from app import db
 from models import User, Answer, Follower, Question
 
 users = (
-    User(id='vincent', password='12345676', name='빈센트', description='나는 그림을 그리기 위해서 살아있다', photo='vincent.jpg'),
-    User(id='postman', password='12345676', name='룰랭', description='편지는 사랑을 싣고', photo='roulin.jpg'),
-    User(id='tanguy', password='12345676', name='탕기', description='예술가는 나의 친구입니다', photo='tanguy.jpg'),
-    User(id='segatori', password='12345676', name='세가토리', description='커피는 나의 힘', photo='segatori.jpg'),
-    User(id='zuave', password='12345676', name='주아브 병사', description='NO WAR', photo='zuave.jpg'),
-    User(id='ginoux', password='12345676', name='지누 부인', description='책은 마음의 양식', photo='ginoux.jpg'),
-    User(id='gachet', password='12345676', name='가셰 박사', description='그림 그리는 의사', photo='gachet.jpg'),
-    User(id='anonymous', password='12345676', name='아무개', description='챕터1', photo='skeleton.jpg'),
+    User(id='vincent', password='12345678', name='빈센트', description='나는 그림을 그리기 위해서 살아있다', photo='vincent.jpg'),
+    User(id='postman', password='12345678', name='룰랭', description='편지는 사랑을 싣고', photo='roulin.jpg'),
+    User(id='tanguy', password='12345678', name='탕기', description='예술가는 나의 친구입니다', photo='tanguy.jpg'),
+    User(id='segatori', password='12345678', name='세가토리', description='커피는 나의 힘', photo='segatori.jpg'),
+    User(id='zuave', password='12345678', name='주아브 병사', description='NO WAR', photo='zuave.jpg'),
+    User(id='ginoux', password='12345678', name='지누 부인', description='책은 마음의 양식', photo='ginoux.jpg'),
+    User(id='gachet', password='12345678', name='가셰 박사', description='그림 그리는 의사', photo='gachet.jpg'),
+    User(id='anonymous', password='12345678', name='아무개', description='챕터1', photo='skeleton.jpg'),
 )
 
 vincent, postman, tanguy, segatori, zuave, ginoux, gachet, anonymous = users
