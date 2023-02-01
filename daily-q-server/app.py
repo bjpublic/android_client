@@ -4,6 +4,8 @@ from flask_restx import Api
 from flask_sqlalchemy import event
 from werkzeug.serving import WSGIRequestHandler
 import firebase_admin
+from flask_jwt_extended.exceptions import JWTExtendedException
+from jwt.exceptions import PyJWTError
 
 from config import get_config_by_name
 from models import db, ma, enable_foreign_keys
@@ -11,6 +13,7 @@ from resources.v1 import api as api_v1
 from resources.v2 import api as api_v2
 from resources.v2 import jwt
 import dummy
+
 
 WSGIRequestHandler.protocol_version = 'HTTP/1.1'
 
@@ -33,12 +36,22 @@ def index():
 def swagger():
     return render_template('swagger.yaml')
 
-def init_dummy_data():
 
+def init_dummy_data():
     db.create_all()
     dummy.create_users()
     dummy.create_relations()
     dummy.create_question_and_answers()
+
+
+class JWTApi(Api):
+    def error_router(self, original_handler, e):
+        if not isinstance(e, PyJWTError) and not isinstance(e, JWTExtendedException) and self._has_fr_route():
+            try:
+                return self.handle_error(e)
+            except Exception:
+                pass  # Fall through to original handler
+        return original_handler(e)
 
 
 def create_app(config_name='dev'):
@@ -47,7 +60,7 @@ def create_app(config_name='dev'):
     app.add_url_rule('/', 'index', view_func=index)
     app.add_url_rule('/swagger.json', 'swagger', view_func=swagger)
 
-    api = Api(
+    api = JWTApi(
         app,
         version='0.1.1',
         doc='/doc')

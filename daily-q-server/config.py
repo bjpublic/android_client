@@ -12,6 +12,7 @@ class Config:
     DEFAULT_VALIDATION_MESSAGE = "Invalid arguments"
     JWT_ACCESS_TOKEN_EXPIRES = 300
     JWT_REFRESH_TOKEN_EXPIRES = 2592000
+    JWT_ERROR_MESSAGE_KEY = "message"
 
 
 class DevelopmentConfig(Config):
