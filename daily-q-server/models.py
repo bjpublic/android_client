@@ -109,11 +109,11 @@ class AnswerSchema(ma.SQLAlchemyAutoSchema):
     def remove_skip_values(self, data, **kwargs):
         return {key: value for key, value in data.items() if value is not None}
 
-    @post_dump
-    def build_image_url(self, data, **kwargs):
-        if data.get('photo', None):
-            data['photo'] = urljoin(request.host_url, f'v2/images/{data["photo"]}')
-        return data
+    # @post_dump
+    # def build_image_url(self, data, **kwargs):
+        # if data.get('photo', None):
+        #     data['photo'] = urljoin(request.host_url, f'v2/images/{data["photo"]}')
+        # return data
 
 
 answer_schema = AnswerSchema()
