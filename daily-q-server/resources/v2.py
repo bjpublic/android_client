@@ -385,10 +385,10 @@ class FollowerResource(Resource):
         db.session.commit()
 
         devices = Device.query.filter(
-            Device.uid.in_(Follower.query.with_entities(Follower.uid).filter(Follower.uid == uid)))
+            Device.uid.in_(Follower.query.with_entities(Follower.uid).filter(Follower.uid == followee_uid)))
 
         tokens = list(map(lambda device: device.token, devices))
-        push.send(tokens, {'type': 'follow', 'uid': followee_uid, 'username': follower.name})
+        push.send(tokens, {'type': 'follow', 'uid': uid, 'username': follower.name})
 
         return None, HTTPStatus.NO_CONTENT
 
